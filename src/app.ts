@@ -1,4 +1,6 @@
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from 'fastify';
+import fastifyCors from '@fastify/cors';
+import fastifyJwt from '@fastify/jwt';
 import { swaggerPlugin } from './plugins/swagger.js';
 
 export async function buildApp(opts: FastifyServerOptions = {}): Promise<FastifyInstance> {
@@ -7,6 +9,8 @@ export async function buildApp(opts: FastifyServerOptions = {}): Promise<Fastify
 		...opts,
 	});
 
+	await app.register(fastifyJwt, { secret: env.JWT_SECRET });
+	await app.register(fastifyCors, { origin: true });
 	await app.register(swaggerPlugin);
 
 	app.get('/health', async () => {
