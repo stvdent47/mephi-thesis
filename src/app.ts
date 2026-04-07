@@ -1,10 +1,13 @@
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from 'fastify';
+import { swaggerPlugin } from './plugins/swagger.js';
 
-export function buildApp(opts: FastifyServerOptions = {}): FastifyInstance {
+export async function buildApp(opts: FastifyServerOptions = {}): Promise<FastifyInstance> {
 	const app = Fastify({
 		logger: true,
 		...opts,
 	});
+
+	await app.register(swaggerPlugin);
 
 	app.get('/health', async () => {
 		return { status: 'ok' };
