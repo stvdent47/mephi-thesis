@@ -1,6 +1,12 @@
-import type { CreateUserInput, NewUserInput, UserRecord, UserRecordWithPassword } from "../auth.types.js";
+import type { CreateUserInput, UserRecord, UserRecordWithPassword } from "../auth.types.js";
 import { WeakPasswordError } from "../errors/errors.js";
 import type { IPasswordHasher } from "../ports/password-hasher.port.js";
+
+interface NewUserInput {
+	email: string;
+	password: string;
+	name?: string;
+}
 
 export const PASSWORD_MIN_LENGTH = 6;
 

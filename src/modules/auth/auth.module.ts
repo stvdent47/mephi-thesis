@@ -1,4 +1,5 @@
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 
 import { AuthService } from './application/auth.service.js';
 import { BcryptPasswordHasher } from './infrastructure/bcrypt-password-hasher.js';
@@ -13,7 +14,7 @@ declare module 'fastify' {
 	}
 }
 
-export const authModule: FastifyPluginAsync = async (app: FastifyInstance) => {
+export const authModule: FastifyPluginAsync = fp(async (app: FastifyInstance) => {
 	const passwordHasher = new BcryptPasswordHasher();
 	const tokenService = new FastifyJwtTokenService(app.jwt);
 	const userRepository = new PrismaUserRepository(app.prisma);
@@ -23,4 +24,4 @@ export const authModule: FastifyPluginAsync = async (app: FastifyInstance) => {
 	app.decorate('authenticate', authenticate);
 
 	await app.register(authController(authService), { prefix: '/api/auth' });
-};
+});

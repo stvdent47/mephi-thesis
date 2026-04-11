@@ -5,9 +5,7 @@ import { LoginRequestDto, LoginResponseDto, type LoginRequestDtoType } from "./d
 import { GetUserInfoResponseDto } from "./dto/get-user-info.dto.js";
 import { handleAuthError } from "./auth-error-handler.js";
 
-export const authController = (
-	authService: IAuthService,
-): FastifyPluginAsync =>
+export const authController = (authService: IAuthService): FastifyPluginAsync =>
 	async (app: FastifyInstance) => {
 		app.post<{ Body: RegisterRequestDtoType }>(
 			'/register',
