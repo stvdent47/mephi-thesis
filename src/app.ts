@@ -6,6 +6,7 @@ import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { env } from './config/env.js';
 import { prismaPlugin } from './plugins/prisma.js';
 import { swaggerPlugin } from './plugins/swagger.js';
+import { authModule } from './modules/auth/auth.module.js';
 import { errorHandlerPlugin } from './plugins/error-handler.js';
 
 export async function buildApp(opts: FastifyServerOptions = {}): Promise<FastifyInstance> {
@@ -19,6 +20,8 @@ export async function buildApp(opts: FastifyServerOptions = {}): Promise<Fastify
 	await app.register(fastifyCors, { origin: true });
 	await app.register(swaggerPlugin);
 	await app.register(errorHandlerPlugin);
+
+	await app.register(authModule);
 
 	app.get('/health', async () => {
 		return { status: 'ok' };
