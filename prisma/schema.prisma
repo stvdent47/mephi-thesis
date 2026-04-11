@@ -14,6 +14,11 @@ enum AccountType {
 	CASH
 }
 
+enum TransactionType {
+	INCOME
+	EXPENSE
+}
+
 model User {
 	id           String   @id @default(uuid())
 	email        String   @unique
@@ -22,6 +27,7 @@ model User {
 	createdAt    DateTime @default(now())
 	updatedAt    DateTime @updatedAt
 
+	categories            Category[]
 	accounts              Account[]
 }
 
@@ -35,6 +41,20 @@ model Account {
 	isActive  Boolean     @default(true)
 	createdAt DateTime    @default(now())
 	updatedAt DateTime    @updatedAt
+
+	user                  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+	@@index([userId])
+}
+
+model Category {
+	id        String          @id @default(uuid())
+	userId    String
+	name      String
+	type      TransactionType
+	icon      String?
+	color     String?
+	createdAt DateTime        @default(now())
 
 	user                  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
