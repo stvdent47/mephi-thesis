@@ -42,7 +42,7 @@ export class PrismaAccountRepository implements IAccountRepository {
 		]);
 
 		return paginatedResponse(
-			accounts.map(account => this.serializeAccount(account)),
+			accounts.map((account) => this.serializeAccount(account)),
 			total,
 			page,
 			limit,

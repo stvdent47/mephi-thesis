@@ -1,3 +1,5 @@
+import { NotFoundError } from '../../../shared/errors/errors.js';
+import type { PaginatedResult } from '../../../shared/types.js';
 import type { IAccountRepository } from '../domain/ports/account-repository.port.js';
 import type {
 	CreateAccountCommand,
@@ -8,17 +10,15 @@ import type {
 	UpdateAccountCommand,
 	UpdateAccountResult,
 } from '../domain/account.types.js';
-import { NotFoundError } from '../../../shared/errors/errors.js';
 import type { IAccountService } from './account-service.port.js';
-import type { PaginatedResult } from '../../../shared/types.js';
 
 export class AccountService implements IAccountService {
 	constructor(
 		private readonly accountRepository: IAccountRepository,
 	) { }
 
-	public async create(userId: string, input: CreateAccountCommand): Promise<CreateAccountResult> {
-		return this.accountRepository.create(userId, input);
+	public async create(userId: string, command: CreateAccountCommand): Promise<CreateAccountResult> {
+		return this.accountRepository.create(userId, command);
 	}
 
 	public async findAll(userId: string, page: number, limit: number): Promise<PaginatedResult<FindAllAccountsResult>> {
@@ -26,29 +26,29 @@ export class AccountService implements IAccountService {
 	}
 
 	public async findById(userId: string, accountId: string): Promise<FindAccountByIdResult> {
-		const result = await this.accountRepository.findById(userId, accountId);
-		if (result === null) {
-			throw new NotFoundError('Account not found');
+		const account = await this.accountRepository.findById(userId, accountId);
+		if (account === null) {
+			throw new NotFoundError('Account was not found');
 		}
 
-		return result;
+		return account;
 	}
 
-	public async update(userId: string, accountId: string, input: UpdateAccountCommand): Promise<UpdateAccountResult> {
-		const result = await this.accountRepository.update(userId, accountId, input);
-		if (result === null) {
-			throw new NotFoundError('Account not found');
+	public async update(userId: string, accountId: string, command: UpdateAccountCommand): Promise<UpdateAccountResult> {
+		const account = await this.accountRepository.update(userId, accountId, command);
+		if (account === null) {
+			throw new NotFoundError('Account was not found');
 		}
 
-		return result;
+		return account;
 	}
 
 	public async delete(userId: string, accountId: string): Promise<DeleteAccountResult> {
-		const result = await this.accountRepository.delete(userId, accountId);
-		if (result === null) {
-			throw new NotFoundError('Account not found');
+		const account = await this.accountRepository.delete(userId, accountId);
+		if (account === null) {
+			throw new NotFoundError('Account was not found');
 		}
 
-		return result;
+		return account;
 	}
 }

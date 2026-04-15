@@ -10,9 +10,9 @@ import type {
 } from '../domain/account.types.js';
 
 export interface IAccountService {
-	create(userId: string, input: CreateAccountCommand): Promise<CreateAccountResult>;
+	create(userId: string, command: CreateAccountCommand): Promise<CreateAccountResult>;
 	findAll(userId: string, page: number, limit: number): Promise<PaginatedResult<FindAllAccountsResult>>;
 	findById(userId: string, accountId: string): Promise<FindAccountByIdResult>;
-	update(userId: string, accountId: string, input: UpdateAccountCommand): Promise<UpdateAccountResult>;
+	update(userId: string, accountId: string, command: UpdateAccountCommand): Promise<UpdateAccountResult>;
 	delete(userId: string, accountId: string): Promise<DeleteAccountResult>;
 }
