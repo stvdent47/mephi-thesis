@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import { AccountType } from "../generated/prisma/client.js";
+import { AccountType, TransactionType } from "../generated/prisma/client.js";
 
 export interface PaginatedResult<T> {
 	data: T[];
@@ -17,3 +17,4 @@ export interface UserIdentity {
 }
 
 export const AccountTypeSchema = Type.Enum(AccountType);
+export const TransactionTypeSchema = Type.Enum(TransactionType);
