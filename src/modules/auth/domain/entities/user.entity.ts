@@ -28,16 +28,16 @@ export class User {
 		};
 	}
 
+	public static fromPersistence(data: UserRecordWithPassword): User {
+		return new User(data.id, data.email, data.name, data.passwordHash);
+	}
+
 	private constructor(
 		public readonly id: string,
 		public readonly email: string,
 		public readonly name: string | null,
 		private readonly passwordHash: string,
 	) { }
-
-	public static fromPersistence(data: UserRecordWithPassword): User {
-		return new User(data.id, data.email, data.name, data.passwordHash);
-	}
 
 	public async verifyPassword(plaintext: string, passwordHasher: IPasswordHasher): Promise<boolean> {
 		return passwordHasher.compare(plaintext, this.passwordHash);

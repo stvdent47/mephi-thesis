@@ -8,7 +8,7 @@ import type {
 	UpdateTransactionCommand,
 	UpdateTransactionResult,
 	DeleteTransactionResult,
-	TransactionFilterInput,
+	TransactionFilterQuery,
 } from '../domain/transaction.types.js';
 import type { ITransactionService } from './transaction-service.port.js';
 
@@ -23,7 +23,7 @@ export class TransactionService implements ITransactionService {
 		return this.transactionRepository.create(userId, data);
 	}
 
-	public async findAll(userId: string, filters: TransactionFilterInput): Promise<FindAllTransactionsResult> {
+	public async findAll(userId: string, filters: TransactionFilterQuery): Promise<FindAllTransactionsResult> {
 		return this.transactionRepository.findAll(userId, filters);
 	}
 

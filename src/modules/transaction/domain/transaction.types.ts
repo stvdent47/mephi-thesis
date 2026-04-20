@@ -61,7 +61,7 @@ export interface UpdateTransactionInput {
 	date?: string;
 }
 
-export type TransactionFilterInput = {
+export type TransactionFilterQuery = {
 	page: number;
 	limit: number;
 	from?: string;

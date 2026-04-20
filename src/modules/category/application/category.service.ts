@@ -53,8 +53,8 @@ export class CategoryService implements ICategoryService {
 			throw new NotFoundError('Category was not found');
 		}
 
-		const txCount = await this.categoryRepository.countTransactions(categoryId);
-		if (txCount > 0) {
+		const transactionCount = await this.categoryRepository.countTransactions(categoryId);
+		if (transactionCount > 0) {
 			throw new ConflictError('Category has transactions — archive or reassign first');
 		}
 

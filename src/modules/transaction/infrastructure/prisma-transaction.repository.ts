@@ -239,7 +239,7 @@ export class PrismaTransactionRepository implements ITransactionRepository {
 			userId,
 			accountId,
 			categoryId,
-			amount: amount as unknown as number,
+			amount: amount.toNumber(),
 			type,
 			description,
 			date: date.getTime(),
