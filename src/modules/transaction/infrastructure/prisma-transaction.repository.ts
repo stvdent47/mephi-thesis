@@ -7,7 +7,7 @@ import type {
 	TransactionRecord,
 	CreateTransactionInput,
 	UpdateTransactionInput,
-	TransactionFilterInput,
+	TransactionFilterQuery,
 } from '../domain/transaction.types.js';
 
 const transactionInclude = {
@@ -68,7 +68,7 @@ export class PrismaTransactionRepository implements ITransactionRepository {
 		return this.serializeTransaction(full);
 	}
 
-	public async findAll(userId: string, filters: TransactionFilterInput): Promise<PaginatedResult<TransactionRecord>> {
+	public async findAll(userId: string, filters: TransactionFilterQuery): Promise<PaginatedResult<TransactionRecord>> {
 		const { skip, take } = paginate(filters.page, filters.limit);
 
 		const where: Record<string, unknown> = { userId };
