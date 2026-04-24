@@ -117,7 +117,9 @@ export class AggregationService implements IAggregationService {
 		const from = fromDate.toISOString().slice(0, 10);
 		const to = now.toISOString().slice(0, 10);
 
-		return this.getAggregatedData(userId, { from, to, groupBy: GroupBy.Month, accountId: null });
+		const results = await this.getAggregatedData(userId, { from, to, groupBy: GroupBy.Month, accountId: null });
+
+		return this.fillMissingMonths(fromDate, now, results);
 	}
 
 	private getPeriodKey(date: Date, groupBy: GroupBy): string {
@@ -135,5 +137,29 @@ export class AggregationService implements IAggregationService {
 		d.setUTCDate(d.getUTCDate() + diff);
 
 		return d.toISOString().slice(0, 10);
+	}
+
+	private fillMissingMonths(from: Date, to: Date, results: AggregatedDataResult[]): AggregatedDataResult[] {
+		const resultsByPeriod = new Map(results.map((result) => [result.period, result]));
+
+		const filled: AggregatedDataResult[] = [];
+		const cursor = new Date(from);
+
+		while (cursor <= to) {
+			const period = cursor.toISOString().slice(0, 7);
+			const existing = resultsByPeriod.get(period);
+
+			filled.push(existing ?? {
+				period,
+				totalIncome: 0,
+				totalExpense: 0,
+				netAmount: 0,
+				categories: [],
+			});
+
+			cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+		}
+
+		return filled;
 	}
 }
