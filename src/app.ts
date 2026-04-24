@@ -12,6 +12,7 @@ import { categoryModule } from './modules/category/category.module.js';
 import { transactionModule } from './modules/transaction/transaction.module.js';
 import { errorHandlerPlugin } from './plugins/error-handler.js';
 import { aggregationModule } from './modules/aggregation/aggregation.module.js';
+import { forecastingModule } from './modules/forecasting/forecasting.module.js';
 
 export async function buildApp(opts: FastifyServerOptions = {}): Promise<FastifyInstance> {
 	const app = Fastify({
@@ -30,6 +31,7 @@ export async function buildApp(opts: FastifyServerOptions = {}): Promise<Fastify
 	await app.register(categoryModule);
 	await app.register(transactionModule);
 	await app.register(aggregationModule);
+	await app.register(forecastingModule);
 
 	app.get('/health', async () => {
 		return { status: 'ok' };
