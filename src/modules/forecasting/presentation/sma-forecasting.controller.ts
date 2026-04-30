@@ -15,14 +15,10 @@ export const smaForecastingController = (smaService: ISMAForecastingService): Fa
 			},
 			async (request) => {
 				const { windowSize = 3, forecastPeriods = 3, categoryId = null } = request.query;
-				// const { months = null, forecastPeriods = null, categoryId = null } = request.query;
 
 				return smaService.forecast(
 					request.user.id,
 					{
-						// ...(months !== null ? { months } : {}),
-						// ...(forecastPeriods !== null ? { forecastPeriods } : {}),
-						// ...(categoryId !== null ? { categoryId } : {}),
 						windowSize,
 						forecastPeriods,
 						categoryId,

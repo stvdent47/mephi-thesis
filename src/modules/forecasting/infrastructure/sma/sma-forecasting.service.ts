@@ -31,14 +31,12 @@ function runSMA(values: number[], windowSize: number, forecastPeriods: number): 
 
 function computeAccuracy(values: number[], windowSize: number, forecastPeriods: number): AccuracyMetrics | null {
 	if (values.length <= forecastPeriods) {
-		console.log({ tag: 'anton first if', values, forecastPeriods })
 		return null;
 	}
 
 	const trainLength = values.length - forecastPeriods;
 	const trainValues = values.slice(0, trainLength);
 	if (trainValues.length < windowSize) {
-		console.log({ tag: 'anton second if', trainValues, windowSize });
 		return null;
 	}
 
@@ -84,7 +82,6 @@ export class SMAForecastingService implements ISMAForecastingService {
 		} = query;
 
 		const trendData = await this.aggregationService.getMonthlyTrend(userId, windowSize + forecastPeriods);
-		console.log({ trendData });
 		if (trendData.length < 2) {
 			throw new AppError(400, 'Insufficient data for SMA forecast: at least 2 months of data are required.');
 		}
@@ -135,7 +132,7 @@ export class SMAForecastingService implements ISMAForecastingService {
 
 				for (const category of trendEntry.categories) {
 					if (!allCategories.has(category.id)) {
-						allCategories.set(category.id, { name: category.name, totals: new Array(trendData.length).fill(0) as number[] });
+						allCategories.set(category.id, { name: category.name, totals: new Array(trendData.length).fill(0) });
 					}
 
 					const entry = allCategories.get(category.id);

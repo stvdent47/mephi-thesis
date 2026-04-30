@@ -25,13 +25,8 @@ export interface AccuracyMetrics {
 }
 
 interface ForecastQuery {
-	// months?: number;
 	windowSize: number;
-	// months: number | null;
-	// forecastPeriods?: number;
 	forecastPeriods: number;
-	// forecastPeriods: number | null;
-	// categoryId?: string;
 	categoryId: string | null;
 }
 
