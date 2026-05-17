@@ -2,9 +2,14 @@ import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from "fastify";
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import { env, NODE_ENV } from '../config/env.js';
 
 export const swaggerPlugin: FastifyPluginAsync = fp(async (app) => {
-	await fastify.register(
+	if (env.NODE_ENV === NODE_ENV.Production) {
+		app.log.info('Skipping Swagger registration in production environment');
+		return;
+	}
+
 	await app.register(
 		fastifySwagger,
 		{
