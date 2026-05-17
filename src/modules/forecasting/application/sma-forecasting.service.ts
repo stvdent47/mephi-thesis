@@ -1,8 +1,8 @@
-import type { IAggregationService } from '../../../aggregation/application/aggregation-service.port.js';
-import { AppError } from '../../../../shared/errors/app.error.js';
-import { buildFuturePeriods } from '../../domain/forecasting.utils.js';
-import { type PredictionItem, type HistoricalItem, type CategoryForecastItem, type AccuracyMetrics, type SMAForecastQuery, type SMAForecastResult, ForecastingMethod } from '../../domain/forecasting.types.js';
-import type { ISMAForecastingService } from '../../application/ports/sma-forecasting-service.port.js';
+import type { IAggregationService } from '../../aggregation/application/aggregation-service.port.js';
+import { AppError } from '../../../shared/errors/app.error.js';
+import { buildFuturePeriods } from '../domain/forecasting.utils.js';
+import { type PredictionItem, type HistoricalItem, type CategoryForecastItem, type AccuracyMetrics, type SMAForecastQuery, type SMAForecastResult, ForecastingMethod } from '../domain/forecasting.types.js';
+import type { ISMAForecastingService } from './ports/sma-forecasting-service.port.js';
 
 interface CategoryEntry {
 	name: string;
@@ -99,8 +99,8 @@ export class SMAForecastingService implements ISMAForecastingService {
 			({ period: entry.period, actual: entry.totalExpense }));
 		const expenseTotals = trendData.map(({ totalExpense }) => totalExpense);
 		const totalPredictions = runSMA(expenseTotals, effectiveWindowSize, forecastPeriods);
-		const totalForecast: PredictionItem[] = futurePeriods.map((period, i) => ({ period, predicted: totalPredictions[i] ?? 0 }));
 
+		const totalForecast: PredictionItem[] = futurePeriods.map((period, i) => ({ period, predicted: totalPredictions[i] ?? 0 }));
 		const categoryForecasts: CategoryForecastItem[] = [];
 
 		if (categoryId !== null) {
