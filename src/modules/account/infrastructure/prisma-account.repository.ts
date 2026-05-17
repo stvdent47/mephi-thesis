@@ -96,8 +96,8 @@ export class PrismaAccountRepository implements IAccountRepository {
 		return {
 			...account,
 			balance: account.balance.toNumber(),
-			createdAt: account.createdAt.getTime(),
-			updatedAt: account.updatedAt.getTime(),
+			createdAt: account.createdAt.toISOString(),
+			updatedAt: account.updatedAt.toISOString(),
 		};
 	}
 }

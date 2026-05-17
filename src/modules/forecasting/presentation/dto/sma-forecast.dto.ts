@@ -3,7 +3,7 @@ import { AccuracyMetricsDto, CategoryForecastItemDto, HistoricalItemDto, Predict
 import { ForecastingMethod } from '../../domain/forecasting.types.js';
 
 export const SMAForecastQueryDto = Type.Object({
-	windowSize: Type.Optional(Type.Integer({ minimum: 2, maximum: 24, default: 3 })),
+	windowSize: Type.Optional(Type.Integer({ minimum: 2, maximum: 48, default: 12 })),
 	forecastPeriods: Type.Optional(Type.Integer({ minimum: 1, maximum: 12, default: 3 })),
 	categoryId: Type.Optional(Type.String({ format: 'uuid' })),
 });

@@ -8,8 +8,8 @@ export interface AccountRecord {
 	currency: string;
 	balance: number;
 	isActive: boolean;
-	createdAt: number;
-	updatedAt: number;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface CreateAccountCommand {

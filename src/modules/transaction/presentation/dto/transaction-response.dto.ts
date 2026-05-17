@@ -9,8 +9,8 @@ export const TransactionResponseDto = Type.Object({
 	amount: Type.Number(),
 	type: TransactionTypeSchema,
 	description: Type.Union([Type.String(), Type.Null()]),
-	date: Type.Number(),
-	createdAt: Type.Number(),
+	date: Type.String({ format: 'date-time' }),
+	createdAt: Type.String({ format: 'date-time' }),
 	account: Type.Object({
 		name: Type.String(),
 		currency: Type.String(),

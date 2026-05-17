@@ -10,7 +10,7 @@ export const AccountResponseDto = Type.Object({
 	balance: Type.Number(),
 	isActive: Type.Boolean(),
 	createdAt: Type.Number(),
-	updatedAt: Type.Number(),
+	updatedAt: Type.String({ format: 'date-time' }),
 });
 
 export const AccountListResponseDto = Type.Object({

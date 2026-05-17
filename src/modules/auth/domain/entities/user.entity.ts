@@ -39,8 +39,8 @@ export class User {
 		private readonly passwordHash: string,
 	) { }
 
-	public async verifyPassword(plaintext: string, passwordHasher: IPasswordHasher): Promise<boolean> {
-		return passwordHasher.compare(plaintext, this.passwordHash);
+	public async verifyPassword(password: string, passwordHasher: IPasswordHasher): Promise<boolean> {
+		return passwordHasher.compare(password, this.passwordHash);
 	}
 
 	public toRecord(): UserRecord {

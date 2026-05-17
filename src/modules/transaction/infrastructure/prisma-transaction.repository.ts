@@ -242,8 +242,8 @@ export class PrismaTransactionRepository implements ITransactionRepository {
 			amount: amount.toNumber(),
 			type,
 			description,
-			date: date.getTime(),
-			createdAt: createdAt.getTime(),
+			date: date.toISOString(),
+			createdAt: createdAt.toISOString(),
 			account,
 			category,
 		};

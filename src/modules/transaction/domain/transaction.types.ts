@@ -9,8 +9,8 @@ export interface TransactionRecord {
 	amount: number;
 	type: TransactionType;
 	description: string | null;
-	date: number;
-	createdAt: number;
+	date: string;
+	createdAt: string;
 	account: { name: string; currency: string };
 	category: { name: string; type: TransactionType };
 }
