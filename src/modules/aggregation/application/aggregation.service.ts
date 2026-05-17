@@ -3,6 +3,48 @@ import type { IAggregationService } from './aggregation-service.port.js';
 import { GroupBy, type AggregatedDataResult, type CategorySummaryResult, type CategoryBreakdown, type AggregatedDataQuery, type PeriodEntry, type CategorySummaryEntry } from '../domain/aggregation.types.js';
 import { TransactionType } from '../../../generated/prisma/client.js';
 
+function getPeriodKey(date: Date, groupBy: GroupBy): string {
+	if (groupBy === GroupBy.Day) {
+		return date.toISOString().slice(0, 10);
+	}
+
+	if (groupBy === GroupBy.Month) {
+		return date.toISOString().slice(0, 7);
+	}
+
+	const d = new Date(date);
+	const day = d.getUTCDay();
+	const diff = (day === 0 ? -6 : 1 - day);
+
+	d.setUTCDate(d.getUTCDate() + diff);
+
+	return d.toISOString().slice(0, 10);
+}
+
+function fillMissingMonths(from: Date, to: Date, results: AggregatedDataResult[]): AggregatedDataResult[] {
+	const resultsByPeriod = new Map(results.map((result) => [result.period, result]));
+
+	const filled: AggregatedDataResult[] = [];
+	const cursor = new Date(from);
+
+	while (cursor <= to) {
+		const period = cursor.toISOString().slice(0, 7);
+		const existing = resultsByPeriod.get(period);
+
+		filled.push(existing ?? {
+			period,
+			totalIncome: 0,
+			totalExpense: 0,
+			netAmount: 0,
+			categories: [],
+		});
+
+		cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+	}
+
+	return filled;
+}
+
 export class AggregationService implements IAggregationService {
 	constructor(
 		private readonly aggregationRepository: IAggregationRepository,
@@ -20,7 +62,7 @@ export class AggregationService implements IAggregationService {
 		const periodMap = new Map<string, PeriodEntry>();
 
 		for (const transaction of transactions) {
-			const period = this.getPeriodKey(transaction.date, groupBy);
+			const period = getPeriodKey(transaction.date, groupBy);
 			if (!periodMap.has(period)) {
 				periodMap.set(period, { income: 0, expense: 0, categoryMap: new Map() });
 			}
@@ -119,47 +161,6 @@ export class AggregationService implements IAggregationService {
 
 		const results = await this.getAggregatedData(userId, { from, to, groupBy: GroupBy.Month, accountId: null });
 
-		return this.fillMissingMonths(fromDate, now, results);
-	}
-
-	private getPeriodKey(date: Date, groupBy: GroupBy): string {
-		if (groupBy === GroupBy.Day) {
-			return date.toISOString().slice(0, 10);
-		}
-
-		if (groupBy === GroupBy.Month) {
-			return date.toISOString().slice(0, 7);
-		}
-
-		const d = new Date(date);
-		const day = d.getUTCDay();
-		const diff = (day === 0 ? -6 : 1 - day);
-		d.setUTCDate(d.getUTCDate() + diff);
-
-		return d.toISOString().slice(0, 10);
-	}
-
-	private fillMissingMonths(from: Date, to: Date, results: AggregatedDataResult[]): AggregatedDataResult[] {
-		const resultsByPeriod = new Map(results.map((result) => [result.period, result]));
-
-		const filled: AggregatedDataResult[] = [];
-		const cursor = new Date(from);
-
-		while (cursor <= to) {
-			const period = cursor.toISOString().slice(0, 7);
-			const existing = resultsByPeriod.get(period);
-
-			filled.push(existing ?? {
-				period,
-				totalIncome: 0,
-				totalExpense: 0,
-				netAmount: 0,
-				categories: [],
-			});
-
-			cursor.setUTCMonth(cursor.getUTCMonth() + 1);
-		}
-
-		return filled;
+		return fillMissingMonths(fromDate, now, results);
 	}
 }
